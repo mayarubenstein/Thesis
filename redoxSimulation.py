@@ -15,32 +15,50 @@ k = 1
 E0 = 0.2 #eV/e #potential
 timestep = 1e-11 #this is the timestep we are using here. For explanation why, see writeup
 
-radius = {'3': r3, '4': r4} #radii for each ion
-diffusionConstant = {'3': d3, '4': d4} #diffusion constant for each species
+
+
+class particle:
+    
+    def __init__(self, pos):
+        self.pos = pos
+        
+    # comparator (by address)
+    def __lt__(self, other):
+        return id(self) < id(other)
+
+    def __eq__(self, other):
+        return id(self) == id(other)
+    
+        
 
 #molecule calss for type of sepcies
 class molecule:
+    
+    radius = {'3': r3, '4': r4} #radii for each ion
+    diffusionConstant = {'3': d3, '4': d4} #diffusion constant for each species
+
     def __init__(self, pos, species):
         self.pos = pos #the molecule's position
         self.species = species #the molecule's species; here given by charge
-        self.rad = radius[species] #save the molecule's radius
-        self.diffusion = diffusionConstant[species] #molecule's diffusion constant
-        
+        self.rad = self.radius[species] #save the molecule's radius
+        self.diffusion = self.diffusionConstant[species] #molecule's diffusion constant
+
+    
     #function that simulates reducing the molecule from -3 to -4
     def reduce(self):
         if self.species != '3':  #check to make sure the particle has charge -3
             raise Exception("can't reduce")
         self.species = '4' #change to -4
-        self.rad = radius['4'] #update radius
-        self.diffusion = diffusionConstant[self.species] #update diffusion constant
+        self.rad = self.radius['4'] #update radius
+        self.diffusion = self.diffusionConstant[self.species] #update diffusion constant
     
     #simulate molecule being oxidized from -4 to -3
     def oxidize(self):
         if self.species != '4': #check the particle has charge -4
             raise Exception("can't oxidize")
         self.species = '3'  #change to -3
-        self.rad = radius['3'] #update radius
-        self.diffusion = diffusionConstant[self.species] #update diffusion constant
+        self.rad = self.radius['3'] #update radius
+        self.diffusion = self.diffusionConstant[self.species] #update diffusion constant
     
     #simulate reaction using Butler-Volmer formalism
     def react(self, potential):
@@ -53,6 +71,13 @@ class molecule:
             prob = k * numpy.exp(-alpha *f * (potential - E0))
             if random < prob:
                 self.oxidize()
+    
+    # comparator (by address)
+    def __lt__(self, other):
+        return id(self) < id(other)
+
+    def __eq__(self, other):
+        return id(self) == id(other)
 
 
 def pbc(self, vector, lengths):

@@ -28,7 +28,7 @@ Four box types with a shared API (`add`, `delete`, `population`, `particles`, `a
 - **`overlapBox`** — particles may overlap; used for the bulk region where collision checking is unnecessary
 - **`augRadiusBox` / `augOverlapBox`** — augmented variants that additionally track per-species particle counts
 
-### `redoxSimulationCopy.py` — `volumeHT` and core simulation
+### `redoxSimulation.py` — `volumeHT` and core simulation
 **`volumeHT`** is the algorithmic centerpiece. It partitions 3D space into a dictionary of boxes for efficient collision checking:
 
 - Computes integer box counts per dimension from a target particle density
